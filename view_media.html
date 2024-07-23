@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Media</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .media-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .media-item {
+            width: 100%;
+            max-width: 300px;
+            margin: 10px;
+        }
+
+        video, img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Captured Media</h1>
+        <div class="media-container" id="mediaContainer">
+            <!-- Media items will be inserted here -->
+        </div>
+        <button class="back-button" onclick="history.back()">Back</button>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('fetch_media.php')
+                .then(response => response.json())
+                .then(data => {
+                    const mediaContainer = document.getElementById('mediaContainer');
+                    data.forEach(media => {
+                        const mediaItem = document.createElement(media.type === 'image' ? 'img' : 'video');
+                        mediaItem.src = media.path;
+                        if (media.type === 'video') {
+                            mediaItem.controls = true;
+                        }
+                        mediaItem.className = 'media-item';
+                        mediaContainer.appendChild(mediaItem);
+                    });
+                })
+                .catch(error => console.error('Error fetching media:', error));
+        });
+    </script>
+</body>
+</html>

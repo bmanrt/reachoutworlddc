@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 include 'db_config.php';
 
 $user_id = $_SESSION['user_id'];
-$query = $conn->prepare("SELECT name, email, country FROM users WHERE id = ?");
+$query = $conn->prepare("SELECT name, email, country, profile_picture FROM users WHERE id = ?");
 if (!$query) {
     http_response_code(500);
     echo json_encode(["error" => "Database query preparation failed: " . $conn->error]);

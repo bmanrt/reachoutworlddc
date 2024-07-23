@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Data Capture</title>
+    <title>Profile</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
@@ -45,8 +44,7 @@
         }
         input[type="text"],
         input[type="email"],
-        input[type="tel"],
-        select {
+        input[type="file"] {
             padding: 10px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
@@ -89,41 +87,33 @@
 </head>
 <body>
     <div class="form-container">
-        <h1>Data Capture</h1>
-        <form action="data_capture.php" method="post">
+        <h1>Profile Settings</h1>
+        <form action="profile.php" method="post" enctype="multipart/form-data">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>
             
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
             
-            <label for="phone">Phone Number:</label>
-            <input type="tel" id="phone" name="phone" required>
+            <label for="profile_picture">Profile Picture:</label>
+            <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
             
-            <label for="country">Country of Residence:</label>
-            <select id="country" name="country" required>
-                <option value="" disabled selected>Select your country</option>
-                <!-- Options will be populated by JavaScript -->
-            </select>
-            
-            <input type="submit" value="Submit">
+            <input type="submit" value="Save Changes">
         </form>
         <button class="back-button" onclick="history.back()">Back</button>
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            fetch('countries.php')
+            fetch('profile.php?action=get')
                 .then(response => response.json())
-                .then(countries => {
-                    const countrySelect = document.getElementById('country');
-                    countries.forEach(country => {
-                        const option = document.createElement('option');
-                        option.value = country;
-                        option.text = country;
-                        countrySelect.appendChild(option);
-                    });
+                .then(data => {
+                    document.getElementById('name').value = data.name;
+                    document.getElementById('email').value = data.email;
+                    if (data.profile_picture) {
+                        document.getElementById('profile_picture').value = data.profile_picture;
+                    }
                 })
-                .catch(error => console.error('Error fetching country list:', error));
+                .catch(error => console.error('Error fetching profile data:', error));
         });
     </script>
 </body>

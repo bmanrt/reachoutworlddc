@@ -1,6 +1,6 @@
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #d8c248;
+    background-color: #f4f4f4;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,9 +9,9 @@ body {
     color: #333;
 }
 
-.container, .form-container {
+.container, .form-container, .settings-container {
     background-color: #fff;
-    padding: 20px 30px;
+    padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -49,6 +49,8 @@ label {
 input[type="text"],
 input[type="email"],
 input[type="password"],
+input[type="tel"],
+input[type="file"],
 select {
     padding: 10px;
     margin-bottom: 10px;
@@ -107,12 +109,10 @@ button {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    position: relative;
 }
 
 input[type="checkbox"] {
     margin-right: 10px;
-    color: #333;
 }
 
 .agree-text {
@@ -155,69 +155,171 @@ input[type="checkbox"] {
     color: #007bff;
 }
 
-/* Styles specific to the index page */
-.index-container {
+.dashboard-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
     text-align: center;
 }
 
-.index-container img {
-    max-width: 100px;
-    margin-bottom: 20px;
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
 }
 
-.index-container h2 {
-    margin-bottom: 10px;
-    font-size: 20px;
-    color: #333;
+.header img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
 }
 
-.index-container p {
-    margin-bottom: 20px;
+.header .user-info {
+    flex-grow: 1;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.header .user-info h2 {
+    margin: 0;
     font-size: 16px;
+}
+
+.header .user-info p {
+    margin: 0;
+    font-size: 12px;
     color: #666;
 }
 
-.index-container .button-primary {
-    background-color: #ffcc00;
-    border: none;
-    color: white;
-    font-size: 16px;
-    padding: 12px 20px;
-    border-radius: 5px;
-    cursor: pointer;
+.menu {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80px;
+}
+
+.menu-item img {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 5px;
+}
+
+.menu-item p {
+    margin: 0;
+    font-size: 12px;
+}
+
+.menu-item a {
     text-decoration: none;
-    display: block;
-    margin: 10px 0;
+    color: inherit;
 }
 
-.index-container .button-secondary {
-    background-color: #fff;
-    border: 1px solid #ffcc00;
-    color: #ffcc00;
-    font-size: 16px;
-    padding: 12px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
-    display: block;
-    margin: 10px 0;
-}
-
-.index-container .button-secondary:hover {
-    background-color: #ffcc00;
-    color: white;
-}
-
-/* Password view toggle styles */
-.password-container {
-    position: relative;
+.navigation {
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
     width: 100%;
+    max-width: 400px;
+    background-color: #fff;
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.password-toggle {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
+.navigation img {
+    width: 25px;
+    height: 25px;
+}
+
+.logout-button {
+    background-color: #ff3333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
     cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    text-align: center;
+}
+
+.logout-button:hover {
+    background-color: #cc0000;
+}
+
+.back-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #ccc;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #bbb;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .dashboard-container, .form-container, .settings-container {
+        padding: 10px;
+        max-width: 90%;
+    }
+
+    .header img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .header .user-info h2 {
+        font-size: 14px;
+    }
+
+    .header .user-info p {
+        font-size: 10px;
+    }
+
+    .menu-item img {
+        width: 25px;
+        height: 25px;
+    }
+
+    .menu-item p {
+        font-size: 10px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="file"],
+    select {
+        font-size: 14px;
+    }
+
+    input[type="submit"], 
+    .logout-button, 
+    .back-button {
+        font-size: 14px;
+        padding: 10px 15px;
+    }
 }

@@ -16,19 +16,30 @@ $phone = $_POST['phone'];
 $country = $_POST['country'];
 
 // Insert data into captured_data table
-$sql = "INSERT INTO captured_data (user_id, name, email, phone, country) VALUES (?, ?, ?, ?, ?)";
-$stmt = $conn->prepare($sql);
+$sql = "INSERT INTO captured_data (user_id, name, email, phone, country) VALUES ('$user_id', '$name', '$email', '$phone', '$country')";
 
-if ($stmt) {
-    $stmt->bind_param("issss", $user_id, $name, $email, $phone, $country);
-    if ($stmt->execute()) {
-        echo "Data captured successfully!";
-    } else {
-        echo "Error: " . $stmt->error;
-    }
-    $stmt->close();
+if ($conn->query($sql) === TRUE) {
+    // Show success page
+    echo "
+    <!DOCTYPE html>
+    <html lang='en'>
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <title>Success</title>
+        <link rel='stylesheet' href='styles.css'>
+    </head>
+    <body>
+        <div class='container'>
+            <h1>Success!</h1>
+            <p>Data captured successfully.</p>
+            <button onclick=\"window.location.href='dashboard.html'\">Go to Dashboard</button>
+        </div>
+    </body>
+    </html>
+    ";
 } else {
-    echo "Error: " . $conn->error;
+    echo "Error: " . $sql . "<br>" . $conn->error;
 }
 
 $conn->close();
