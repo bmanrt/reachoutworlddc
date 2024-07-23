@@ -1,0 +1,223 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #d8c248;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    color: #333;
+}
+
+.container, .form-container {
+    background-color: #fff;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: left;
+    margin: 20px auto;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+}
+
+p {
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #666;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+label {
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input[type="submit"], 
+a.button, 
+button {
+    padding: 12px 20px;
+    background-color: #ffcc00;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    display: block;
+}
+
+input[type="submit"]:hover, 
+a.button:hover, 
+button:hover {
+    background-color: #e6b800;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    text-align: center;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+button {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+    color: #333;
+}
+
+.agree-text {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.kingschat-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.kingschat-button img {
+    margin-right: 10px;
+}
+
+.kingschat-button:hover {
+    background-color: #e0e0e0;
+}
+
+.footer-text {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.footer-text a {
+    margin-left: 5px;
+    color: #007bff;
+}
+
+/* Styles specific to the index page */
+.index-container {
+    text-align: center;
+}
+
+.index-container img {
+    max-width: 100px;
+    margin-bottom: 20px;
+}
+
+.index-container h2 {
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #333;
+}
+
+.index-container p {
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #666;
+}
+
+.index-container .button-primary {
+    background-color: #ffcc00;
+    border: none;
+    color: white;
+    font-size: 16px;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    margin: 10px 0;
+}
+
+.index-container .button-secondary {
+    background-color: #fff;
+    border: 1px solid #ffcc00;
+    color: #ffcc00;
+    font-size: 16px;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    margin: 10px 0;
+}
+
+.index-container .button-secondary:hover {
+    background-color: #ffcc00;
+    color: white;
+}
+
+/* Password view toggle styles */
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
