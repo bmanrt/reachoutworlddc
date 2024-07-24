@@ -9,6 +9,22 @@ include('db_config.php');
 $user_id = $_SESSION['user_id'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_GET['action']) && $_GET['action'] == 'delete_picture') {
+        $sql = "UPDATE users SET profile_picture = NULL WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('i', $user_id);
+
+        if ($stmt->execute()) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'error' => $stmt->error]);
+        }
+
+        $stmt->close();
+        $conn->close();
+        exit();
+    }
+
     $name = $_POST['name'];
     $email = $_POST['email'];
     

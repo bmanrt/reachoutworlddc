@@ -4,82 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            color: #333;
-        }
-        .settings-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            text-align: left;
-            margin: 20px auto;
-        }
-        h1 {
-            margin-bottom: 20px;
-            font-size: 24px;
-            color: #333;
-            text-align: center;
-        }
-        .settings-item {
-            margin-bottom: 15px;
-        }
-        .logout-button {
-            background-color: #ff3333;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            width: 100%;
-            text-align: center;
-        }
-        .logout-button:hover {
-            background-color: #cc0000;
-        }
-        .back-button {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 15px;
-            background-color: #ccc;
-            color: #333;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-        .back-button:hover {
-            background-color: #bbb;
-        }
-    </style>
+    <link rel="stylesheet" href="settings.css">
 </head>
 <body>
     <div class="settings-container">
         <h1>Settings</h1>
         <div class="settings-item">
-            <a href="profile.html">Profile Settings</a>
+            <img src="icons/account-icon.png" alt="Account Icon">
+            <a href="profile.html">Account</a>
         </div>
         <div class="settings-item">
-            <a href="account_settings.html">Account Settings</a>
+            <img src="icons/notifications-icon.png" alt="Notifications Icon">
+            <a href="notifications.html">Notifications</a>
         </div>
         <div class="settings-item">
-            <a href="privacy_settings.html">Privacy Settings</a>
+            <img src="icons/appearance-icon.png" alt="Appearance Icon">
+            <a href="appearance.html">Appearance</a>
+        </div>
+        <div class="settings-item">
+            <img src="icons/privacy-icon.png" alt="Privacy Icon">
+            <a href="privacy_settings.html">Privacy & Security</a>
+        </div>
+        <div class="settings-item">
+            <img src="icons/help-icon.png" alt="Help Icon">
+            <a href="help_support.html">Help and Support</a>
+        </div>
+        <div class="settings-item">
+            <img src="icons/about-icon.png" alt="About Icon">
+            <a href="about.html">About</a>
         </div>
         <div class="settings-item">
             <button class="logout-button" onclick="window.location.href='logout.php'">Logout</button>

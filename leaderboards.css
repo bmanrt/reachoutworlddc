@@ -1,4 +1,3 @@
-/* General styles */
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #f4f4f4;
@@ -30,48 +29,25 @@ h1 {
     text-align: center;
 }
 
-p {
-    margin-bottom: 20px;
-    font-size: 16px;
-    color: #666;
-    text-align: center;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-label {
-    text-align: left;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"],
-select {
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
+table {
     width: 100%;
-    box-sizing: border-box;
+    border-collapse: collapse;
+    margin-top: 20px;
 }
 
-.password-container {
-    position: relative;
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
 }
 
-.password-toggle {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
 }
 
 input[type="submit"], 
@@ -167,63 +143,4 @@ input[type="checkbox"] {
 .footer-text a {
     margin-left: 5px;
     color: #007bff;
-}
-
-/* Table styles */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-}
-
-tr:hover {
-    background-color: #f5f5f5;
-}
-
-/* Media queries */
-@media (max-width: 768px) {
-    body {
-        padding: 5px;
-    }
-
-    .container, .form-container {
-        padding: 15px 20px;
-        margin: 10px auto;
-    }
-
-    h1 {
-        font-size: 20px;
-    }
-
-    p {
-        font-size: 14px;
-    }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="password"],
-    select {
-        font-size: 14px;
-    }
-
-    input[type="submit"], 
-    a.button, 
-    button {
-        font-size: 14px;
-    }
-
-    th, td {
-        padding: 8px;
-    }
 }

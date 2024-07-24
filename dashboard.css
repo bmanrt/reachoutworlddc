@@ -1,0 +1,136 @@
+/* General styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    color: #333;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.dashboard-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.header img {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+}
+
+.header .user-info {
+    flex-grow: 1;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.header .user-info h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.header .user-info p {
+    margin: 0;
+    font-size: 16px;
+    color: #666;
+}
+
+.menu {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 150px;
+    margin-bottom: 20px;
+}
+
+.menu-item img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+.menu-item p {
+    margin: 0;
+    font-size: 18px;
+}
+
+.menu-item a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 800px;
+    background-color: #fff;
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navigation img {
+    width: 30px;
+    height: 30px;
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+    body {
+        padding: 5px;
+    }
+
+    .dashboard-container {
+        padding: 15px 20px;
+        margin: 10px auto;
+    }
+
+    .header .user-info h2 {
+        font-size: 18px;
+    }
+
+    .header .user-info p {
+        font-size: 14px;
+    }
+
+    .menu-item img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .menu-item p {
+        font-size: 16px;
+    }
+
+    .navigation img {
+        width: 25px;
+        height: 25px;
+    }
+}
