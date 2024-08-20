@@ -1,7 +1,6 @@
-/* General styles */
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #f4f4f4;
+    background-color: #ffcc00b9;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,7 +15,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 400px;
+    max-width: 350px;
     text-align: left;
     margin: 20px auto;
 }
@@ -28,16 +27,23 @@ h1 {
     text-align: center;
 }
 
-form {
+.profile-picture {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.profile-picture img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 label {
-    text-align: left;
-    font-weight: bold;
+    display: block;
     margin-bottom: 5px;
+    font-weight: bold;
 }
 
 input[type="text"],
@@ -68,8 +74,7 @@ input[type="submit"]:hover {
     background-color: #e6b800;
 }
 
-.back-button,
-.delete-button {
+button {
     display: inline-block;
     margin-top: 10px;
     padding: 10px 15px;
@@ -83,20 +88,6 @@ input[type="submit"]:hover {
     transition: background-color 0.3s ease;
 }
 
-.back-button:hover,
-.delete-button:hover {
+button:hover {
     background-color: #bbb;
-}
-
-.profile-picture {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
-}
-
-.profile-picture img {
-    border-radius: 50%;
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
 }

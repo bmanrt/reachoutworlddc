@@ -9,33 +9,29 @@ include('db_config.php');
 $user_id = $_SESSION['user_id'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_GET['action']) && $_GET['action'] == 'delete_picture') {
-        $sql = "UPDATE users SET profile_picture = NULL WHERE id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param('i', $user_id);
-
-        if ($stmt->execute()) {
-            echo json_encode(['success' => true]);
-        } else {
-            echo json_encode(['success' => false, 'error' => $stmt->error]);
-        }
-
-        $stmt->close();
-        $conn->close();
-        exit();
-    }
-
     $name = $_POST['name'];
     $email = $_POST['email'];
-    
+
     $profile_picture = $_FILES['profile_picture'];
     $profile_picture_path = '';
 
+    // Fetch the existing profile picture path from the database
+    $sql = "SELECT profile_picture FROM users WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+    $existing_profile_picture = $user['profile_picture'];
+    $stmt->close();
+
     if ($profile_picture['size'] > 0) {
+        // If a new profile picture is uploaded, move it to the uploads directory
         $profile_picture_path = 'uploads/' . basename($profile_picture['name']);
         move_uploaded_file($profile_picture['tmp_name'], $profile_picture_path);
     } else {
-        $profile_picture_path = $_POST['existing_profile_picture'];
+        // Otherwise, retain the existing profile picture
+        $profile_picture_path = $existing_profile_picture;
     }
 
     $sql = "UPDATE users SET name = ?, email = ?, profile_picture = ? WHERE id = ?";

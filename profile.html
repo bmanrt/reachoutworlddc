@@ -24,7 +24,6 @@
             
             <input type="submit" value="Save Changes">
         </form>
-        <button class="delete-button" onclick="deleteProfilePicture()">Delete Profile Picture</button>
         <button class="back-button" onclick="history.back()">Back</button>
     </div>
     <script>
@@ -40,21 +39,6 @@
                 })
                 .catch(error => console.error('Error fetching profile data:', error));
         });
-
-        function deleteProfilePicture() {
-            fetch('profile.php?action=delete_picture', {
-                method: 'POST'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById('profilePicture').src = 'default-profile.png';
-                } else {
-                    console.error('Error deleting profile picture:', data.error);
-                }
-            })
-            .catch(error => console.error('Error deleting profile picture:', error));
-        }
     </script>
 </body>
 </html>

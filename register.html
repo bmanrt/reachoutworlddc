@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="register.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
     <div class="form-container">
@@ -32,12 +33,14 @@
             <div class="form-group password-container">
                 <label for="reg-password">Password:</label>
                 <input type="password" id="reg-password" name="password" placeholder="Enter your password" required>
-                <span class="password-toggle" onclick="togglePassword()">👁️</span>
+                <span class="password-toggle" onclick="togglePassword()"><i class="fas fa-eye"></i></span>
             </div>
             
             <div class="form-group agree-text">
-                <input type="checkbox" id="agree" name="agree" required>
-                <label for="agree">I agree with the Terms and Privacy Policy.</label>
+                <label for="reg-agree">
+                    <input type="checkbox" id="reg-agree" name="agree" required>
+                    I agree to the Terms of Service.
+                </label>
             </div>
             
             <input type="submit" value="Sign Up">
@@ -68,10 +71,11 @@
 
         function togglePassword() {
             const passwordField = document.getElementById('reg-password');
-            const passwordToggle = document.querySelector('.password-toggle');
+            const passwordToggle = document.querySelector('.password-toggle i');
             const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordField.setAttribute('type', type);
-            passwordToggle.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
+            passwordToggle.classList.toggle('fa-eye');
+            passwordToggle.classList.toggle('fa-eye-slash');
         }
     </script>
 </body>

@@ -1,9 +1,9 @@
 /* General styles */
 body, html {
-    height: 100%;
-    margin: 0;
+    height: auto;
+    margin: auto;
     font-family: 'Roboto', sans-serif;
-    background-color: #f4f4f4;
+    background-color: #ffcc00b9;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,9 +16,9 @@ body, html {
     padding: 20px 30px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
+    width: auto;
     max-width: 800px;
-    height: 90%;
+    height: 100%;
     overflow-y: auto;
     text-align: left;
     margin: 20px auto;
