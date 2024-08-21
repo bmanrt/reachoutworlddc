@@ -1,6 +1,6 @@
 <?php
 include('db_config.php');
-include('utils.php');
+include('send.php');
 
 // Set the content-type to application/json for all responses
 header("Content-Type: application/json");
