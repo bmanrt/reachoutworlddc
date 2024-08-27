@@ -26,9 +26,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->close();
 
     if ($profile_picture['size'] > 0) {
-        // If a new profile picture is uploaded, move it to the uploads directory
-        $profile_picture_path = 'uploads/' . basename($profile_picture['name']);
-        move_uploaded_file($profile_picture['tmp_name'], $profile_picture_path);
+        $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+        if (in_array($profile_picture['type'], $allowed_types)) {
+            $file_extension = pathinfo($profile_picture['name'], PATHINFO_EXTENSION);
+            $profile_picture_path = 'uploads/' . uniqid() . '.' . $file_extension;
+            if (move_uploaded_file($profile_picture['tmp_name'], $profile_picture_path)) {
+                // If upload successful, delete the old profile picture if it exists
+                if (!empty($existing_profile_picture) && file_exists($existing_profile_picture)) {
+                    unlink($existing_profile_picture);
+                }
+            } else {
+                echo "Error uploading file.";
+                exit();
+            }
+        } else {
+            echo "Invalid file type. Only JPG, PNG, and GIF are allowed.";
+            exit();
+        }
     } else {
         // Otherwise, retain the existing profile picture
         $profile_picture_path = $existing_profile_picture;
