@@ -1,5 +1,5 @@
 <?php
-$servername = "10.11.0.106";
+$servername = "localhost";
 $username = "root";
 $password = "lolamarsh";
 $dbname = "user_capture";
