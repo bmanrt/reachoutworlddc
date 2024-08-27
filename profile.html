@@ -21,6 +21,7 @@
             
             <label for="profile_picture">Profile Picture:</label>
             <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
+            <span id="file-name"></span>
             
             <input type="submit" value="Save Changes">
         </form>
@@ -38,6 +39,17 @@
                     }
                 })
                 .catch(error => console.error('Error fetching profile data:', error));
+
+            document.getElementById('profile_picture').addEventListener('change', function(e) {
+                const fileName = e.target.files[0].name;
+                document.getElementById('file-name').textContent = fileName;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profilePicture').src = e.target.result;
+                }
+                reader.readAsDataURL(e.target.files[0]);
+            });
         });
     </script>
 </body>
