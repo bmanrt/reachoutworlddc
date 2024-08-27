@@ -4,29 +4,51 @@ include('db_config.php');
 // Set headers for JSON response
 header("Content-Type: application/json");
 
-// Check if the request method is POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the JSON input data
     $input = json_decode(file_get_contents("php://input"), true);
 
-    // Check if all necessary data is provided
+    // Validate that necessary data is provided
     if (isset($input['name']) && isset($input['email']) && isset($input['country']) && isset($input['password'])) {
-        // Sanitize and assign the input data
         $name = $conn->real_escape_string($input['name']);
         $email = $conn->real_escape_string($input['email']);
         $country = $conn->real_escape_string($input['country']);
         $password = password_hash($conn->real_escape_string($input['password']), PASSWORD_DEFAULT);
 
-        // Insert data into database
-        $sql = "INSERT INTO users (name, email, country, password) VALUES ('$name', '$email', '$country', '$password')";
+        // Check if email is valid
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo json_encode(["status" => "error", "message" => "Invalid email format"]);
+            exit();
+        }
 
-        if ($conn->query($sql) === TRUE) {
+        // Check for duplicate email
+        $checkEmail = "SELECT id FROM users WHERE email = ?";
+        $stmt = $conn->prepare($checkEmail);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+            echo json_encode(["status" => "error", "message" => "Email already exists"]);
+            $stmt->close();
+            exit();
+        }
+        $stmt->close();
+
+        // Insert data into the database
+        $sql = "INSERT INTO users (name, email, country, password) VALUES (?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssss", $name, $email, $country, $password);
+
+        if ($stmt->execute()) {
             // Success response
             echo json_encode(["status" => "success", "message" => "Registration successful!"]);
         } else {
             // Error response
-            echo json_encode(["status" => "error", "message" => "Database error: " . $conn->error]);
+            echo json_encode(["status" => "error", "message" => "Database error: " . $stmt->error]);
         }
+
+        $stmt->close();
     } else {
         // Invalid input response
         echo json_encode(["status" => "error", "message" => "Invalid input data"]);
