@@ -6,7 +6,7 @@ header("Content-Type: application/json");
 
 // Check the request method (POST or GET)
 if ($_SERVER["REQUEST_METHOD"] == "POST" || $_SERVER["REQUEST_METHOD"] == "GET") {
-    
+
     // Retrieve email and password based on the request method
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // For POST requests
@@ -37,7 +37,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" || $_SERVER["REQUEST_METHOD"] == "GET")
                 // Password correct
                 session_start();
                 $_SESSION['user_id'] = $row['id'];
-                echo json_encode(["status" => "success", "message" => "Login successful!"]);
+
+                // Return success with user ID
+                echo json_encode([
+                    "status" => "success", 
+                    "message" => "Login successful!", 
+                    "user_id" => $row['id'] // Include user_id in the response
+                ]);
             } else {
                 // Password incorrect
                 echo json_encode(["status" => "error", "message" => "Invalid email or password!"]);
