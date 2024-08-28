@@ -41,9 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $conn->close();
 
     // Return the results in JSON format
-    echo json_encode(["status" => "success", "data" => $activities]);
+    if (count($activities) > 0) {
+        echo json_encode(["status" => "success", "data" => $activities]);
+    } else {
+        echo json_encode(["status" => "success", "message" => "No activities found", "data" => []]);
+    }
 } else {
     // Respond with a JSON error if the request method is not GET
     echo json_encode(["status" => "error", "message" => "Invalid request method"]);
 }
-?>

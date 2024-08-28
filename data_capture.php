@@ -1,46 +1,53 @@
 <?php
+// Set the header to indicate the content type as JSON
+header('Content-Type: application/json');
+
+// Start the session to get the user_id
 session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.html"); // Redirect to login if not logged in
+
+// Include database configuration
+include('db_config.php');
+
+// Get the JSON input from the Flutter app
+$input = json_decode(file_get_contents("php://input"), true);
+
+// Validate the input
+if (!isset($input['user_id']) || !isset($input['name']) || !isset($input['email']) || !isset($input['phone']) || !isset($input['country'])) {
+    http_response_code(400); // Bad Request
+    echo json_encode(["status" => "error", "message" => "Missing required fields"]);
     exit();
 }
 
-// Database connection
-include('db_config.php');
+// Sanitize and assign the input values
+$user_id = $conn->real_escape_string($input['user_id']);
+$name = $conn->real_escape_string($input['name']);
+$email = $conn->real_escape_string($input['email']);
+$phone = $conn->real_escape_string($input['phone']);
+$country = $conn->real_escape_string($input['country']);
 
-// Get form data
-$user_id = $_SESSION['user_id'];
-$name = $_POST['name'];
-$email = $_POST['email'];
-$phone = $_POST['phone'];
-$country = $_POST['country'];
+// Insert the data into the captured_data table
+$sql = "INSERT INTO captured_data (user_id, name, email, phone, country) VALUES (?, ?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
 
-// Insert data into captured_data table
-$sql = "INSERT INTO captured_data (user_id, name, email, phone, country) VALUES ('$user_id', '$name', '$email', '$phone', '$country')";
+if ($stmt) {
+    $stmt->bind_param("issss", $user_id, $name, $email, $phone, $country);
+    
+    if ($stmt->execute()) {
+        // Send success response
+        echo json_encode(["status" => "success", "message" => "Data captured successfully"]);
+    } else {
+        // If there was a problem executing the query
+        http_response_code(500); // Internal Server Error
+        echo json_encode(["status" => "error", "message" => "Failed to capture data"]);
+    }
 
-if ($conn->query($sql) === TRUE) {
-    // Show success page
-    echo "
-    <!DOCTYPE html>
-    <html lang='en'>
-    <head>
-        <meta charset='UTF-8'>
-        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-        <title>Success</title>
-        <link rel='stylesheet' href='styles.css'>
-    </head>
-    <body>
-        <div class='container'>
-            <h1>Success!</h1>
-            <p>Data captured successfully.</p>
-            <button onclick=\"window.location.href='dashboard.html'\">Go to Dashboard</button>
-        </div>
-    </body>
-    </html>
-    ";
+    $stmt->close();
 } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+    // If there was a problem preparing the SQL statement
+    http_response_code(500); // Internal Server Error
+    echo json_encode(["status" => "error", "message" => "Database error: " . $conn->error]);
 }
 
+// Close the database connection
 $conn->close();
 ?>
