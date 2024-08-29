@@ -32,10 +32,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($update_stmt->execute()) {
                 // Send reset email using your sendResetEmail function
-                sendResetEmail($email, $token);
                 echo json_encode(["status" => "success", "message" => "A reset link has been sent to your email."]);
+                sendResetEmail($email, $token);
+                
+                // Send JSON response instead of an HTML page
             } else {
-                // Handle SQL execution error
                 echo json_encode(["status" => "error", "message" => "Failed to update reset token in the database."]);
             }
 
@@ -47,13 +48,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $stmt->close();
     } else {
-        // Email not provided in the request
         echo json_encode(["status" => "error", "message" => "Email is required."]);
     }
 
     $conn->close();
 } else {
-    // Invalid request method
     echo json_encode(["status" => "error", "message" => "Invalid request method."]);
 }
 ?>

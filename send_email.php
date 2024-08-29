@@ -6,7 +6,7 @@ require 'vendor/autoload.php';
 
 // Function to send the reset email
 function sendResetEmail($email, $token) {
-    $reset_link = "http://localhost/user_capture/reset_password.php?token=$token"; // Ensure the URL is correct
+    $reset_link = "http://apps.qubators.biz/reachoutworlddc/reset_password.php?token=$token"; // Ensure the URL is correct
     $mail = new PHPMailer(true);
 
     try {
@@ -31,78 +31,78 @@ function sendResetEmail($email, $token) {
 
         $mail->send();
         // Email sent successfully
-        displayMessage('A reset link has been sent to your email.');
+        // displayMessage('A reset link has been sent to your email.');
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
 }
 
-function displayMessage($message) {
-    echo <<<HTML
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Reset</title>
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #ffcc00;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            color: #333;
-            padding: 10px;
-            box-sizing: border-box;
-        }
+// function displayMessage($message) {
+//     echo <<<HTML
+// <!DOCTYPE html>
+// <html lang="en">
+// <head>
+//     <meta charset="UTF-8">
+//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//     <title>Password Reset</title>
+//     <style>
+//         body {
+//             font-family: 'Roboto', sans-serif;
+//             background-color: #ffcc00;
+//             display: flex;
+//             justify-content: center;
+//             align-items: center;
+//             height: 100vh;
+//             margin: 0;
+//             color: #333;
+//             padding: 10px;
+//             box-sizing: border-box;
+//         }
 
-        .message-container {
-            background-color: #fff;
-            padding: 20px 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            margin: 20px auto;
-        }
+//         .message-container {
+//             background-color: #fff;
+//             padding: 20px 30px;
+//             border-radius: 10px;
+//             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+//             width: 100%;
+//             max-width: 400px;
+//             text-align: center;
+//             margin: 20px auto;
+//         }
         
-        .message-container p {
-            font-size: 16px;
-            color: #333;
-            margin-bottom: 20px;
-        }
+//         .message-container p {
+//             font-size: 16px;
+//             color: #333;
+//             margin-bottom: 20px;
+//         }
 
-        .back-link {
-            display: inline-block;
-            padding: 12px 20px;
-            background-color: #ffcc00;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
+//         .back-link {
+//             display: inline-block;
+//             padding: 12px 20px;
+//             background-color: #ffcc00;
+//             color: #fff;
+//             border: none;
+//             border-radius: 5px;
+//             text-decoration: none;
+//             font-size: 16px;
+//             transition: background-color 0.3s ease;
+//         }
 
-        .back-link:hover {
-            background-color: #e6b800;
-        }
-    </style>
-</head>
-<body>
-    <div class="message-container">
-        <h1>Password Reset</h1>
-        <p>$message</p>
-        <a href="index.html" class="back-link">Return to Homepage</a>
-    </div>
-</body>
-</html>
-HTML;
-    exit();
-}
+//         .back-link:hover {
+//             background-color: #e6b800;
+//         }
+//     </style>
+// </head>
+// <body>
+//     <div class="message-container">
+//         <h1>Password Reset</h1>
+//         <p>$message</p>
+//         <a href="index.html" class="back-link">Return to Homepage</a>
+//     </div>
+// </body>
+// </html>
+// HTML;
+//     exit();
+// }
 
 // Example usage
