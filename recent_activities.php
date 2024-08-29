@@ -1,25 +1,18 @@
 <?php
-session_start();
-
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    // Respond with a JSON error message instead of redirecting to HTML
-    header('Content-Type: application/json');
-    echo json_encode(["status" => "error", "message" => "Not logged in"]);
-    exit();
-}
-
-// Database connection
-include('db_config.php');
-
-// Set headers for JSON response
+// Set the header to indicate the content type as JSON
 header('Content-Type: application/json');
 
-// Check if the request method is GET
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $user_id = $_SESSION['user_id'];
+// Include database configuration
+include('db_config.php');
 
-    // Fetch latest entries for the logged-in user
+// Get the JSON input from the Flutter app (or query parameters in a GET request)
+$input = json_decode(file_get_contents("php://input"), true);
+
+// Check if the request method is GET and user_id is provided
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['user_id'])) {
+    $user_id = intval($_GET['user_id']);
+
+    // Fetch latest entries for the provided user_id
     $sql = "SELECT name, email, phone, country, created_at FROM captured_data WHERE user_id = ? ORDER BY created_at DESC";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $user_id);
@@ -47,6 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode(["status" => "success", "message" => "No activities found", "data" => []]);
     }
 } else {
-    // Respond with a JSON error if the request method is not GET
-    echo json_encode(["status" => "error", "message" => "Invalid request method"]);
+    // Respond with a JSON error if the request method is not GET or user_id is missing
+    http_response_code(400); // Bad Request
+    echo json_encode(["status" => "error", "message" => "Invalid request method or missing user_id"]);
 }
+?>
