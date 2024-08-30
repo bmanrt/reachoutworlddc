@@ -1,18 +1,16 @@
 <?php
 header('Content-Type: application/json');
 
-// Ensure the user is logged in by checking user_id in JSON request
-$input = json_decode(file_get_contents("php://input"), true);
-
-if (!isset($input['user_id'])) {
-    echo json_encode(["status" => "error", "message" => "Missing user_id"]);
-    exit();
-}
-
-include('db_config.php');
-$user_id = $conn->real_escape_string($input['user_id']);
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Ensure the user is logged in by checking user_id in POST data
+    if (!isset($_POST['user_id'])) {
+        echo json_encode(["status" => "error", "message" => "Missing user_id"]);
+        exit();
+    }
+
+    include('db_config.php');
+    $user_id = $conn->real_escape_string($_POST['user_id']);
+
     // Check if a profile picture is provided
     if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['size'] > 0) {
         $profile_picture = $_FILES['profile_picture'];
@@ -76,6 +74,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo json_encode(["status" => "error", "message" => "No profile picture uploaded"]);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    if (!isset($_GET['user_id'])) {
+        echo json_encode(["status" => "error", "message" => "Missing user_id"]);
+        exit();
+    }
+
+    include('db_config.php');
+    $user_id = $conn->real_escape_string($_GET['user_id']);
+
     // Return the user's current profile picture URL
     $sql = "SELECT profile_picture FROM users WHERE id = ?";
     $stmt = $conn->prepare($sql);
