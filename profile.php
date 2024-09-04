@@ -2,12 +2,15 @@
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Ensure the user is logged in by checking user_id in POST data
-    if (!isset($_POST['user_id'])) {
-        echo json_encode(["status" => "error", "message" => "Missing user_id"]);
-        exit();
-    }
+    error_log("POST data: " . print_r($_POST, true));
+    error_log("FILES data: " . print_r($_FILES, true));
 
+    // Ensure the user is logged in by checking user_id in POST data
+    if (isset($_POST['user_id'])) {
+        echo json_encode(["status" => "success", "message" => "user_id received", "user_id" => $_POST['user_id']]);
+    } else {
+        echo json_encode(["status" => "error", "message" => "Missing user_id"]);
+    }
     include('db_config.php');
     $user_id = $conn->real_escape_string($_POST['user_id']);
 
