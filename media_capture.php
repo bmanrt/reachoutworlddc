@@ -3,6 +3,9 @@ include('db_config.php'); // Include your database configuration
 
 // Get the user_id from the POST request
 $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+$user_country = isset($_POST['user_country']) && !empty($_POST['user_country']) ? $_POST['user_country'] : 'N/A';
+$user_state = isset($_POST['user_state']) && !empty($_POST['user_state']) ? $_POST['user_state'] : 'N/A';
+$user_region = isset($_POST['user_region']) && !empty($_POST['user_region']) ? $_POST['user_region'] : 'N/A';
 
 if ($user_id == 0) {
     echo json_encode(['status' => 'error', 'message' => 'Invalid user ID']);
@@ -52,8 +55,10 @@ if ($uploadOk == 0) {
     if (move_uploaded_file($_FILES["media"]["tmp_name"], $target_file)) {
         $media_type = (strstr(mime_content_type($target_file), "video/")) ? 'video' : 'image';
 
-        $stmt = $conn->prepare("INSERT INTO user_media (user_id, file_path, media_type) VALUES (?, ?, ?)");
-        $stmt->bind_param("iss", $user_id, $target_file, $media_type);
+        // Updated SQL to insert user location data (country, state, region)
+        $stmt = $conn->prepare("INSERT INTO user_media (user_id, file_path, media_type, user_country, user_state, user_region) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("isssss", $user_id, $target_file, $media_type, $user_country, $user_state, $user_region);
+
         if ($stmt->execute()) {
             echo json_encode(['status' => 'success', 'message' => 'File uploaded successfully', 'file_path' => $target_file]);
         } else {
