@@ -7,6 +7,7 @@ $user_country = isset($_POST['user_country']) && !empty($_POST['user_country']) 
 $user_state = isset($_POST['user_state']) && !empty($_POST['user_state']) ? $_POST['user_state'] : 'N/A';
 $user_region = isset($_POST['user_region']) && !empty($_POST['user_region']) ? $_POST['user_region'] : 'N/A';
 
+// Check if user_id is valid
 if ($user_id == 0) {
     echo json_encode(['status' => 'error', 'message' => 'Invalid user ID']);
     exit();
@@ -18,14 +19,24 @@ $target_file = $target_dir . $unique_name;
 $uploadOk = 1;
 $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-// Check if image or video file is an actual image or video
+// Logging the paths and variables for debugging
+echo json_encode([
+    'status' => 'debug',
+    'message' => 'Starting upload process',
+    'target_file' => $target_file,
+    'temp_file' => $_FILES['media']['tmp_name']
+]);
+
+// Check if the file is an image or video
 $check = getimagesize($_FILES["media"]["tmp_name"]);
-if($check !== false) {
+if ($check !== false) {
     $uploadOk = 1;
+    echo json_encode(['status' => 'debug', 'message' => 'File is a valid image']);
 } else {
     $file_type = mime_content_type($_FILES["media"]["tmp_name"]);
-    if(strstr($file_type, "video/")) {
+    if (strstr($file_type, "video/")) {
         $uploadOk = 1;
+        echo json_encode(['status' => 'debug', 'message' => 'File is a valid video']);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'File is not an image or video']);
         $uploadOk = 0;
@@ -35,39 +46,52 @@ if($check !== false) {
 
 // Check file size (limit to 50MB)
 if ($_FILES["media"]["size"] > 50000000) {
-    echo json_encode(['status' => 'error', 'message' => 'Sorry, your file is too large.']);
+    echo json_encode(['status' => 'error', 'message' => 'File size exceeds the 50MB limit']);
     $uploadOk = 0;
     exit();
 }
 
 // Allow certain file formats
 $allowed_types = ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'avi', 'mov'];
-if(!in_array($imageFileType, $allowed_types)) {
-    echo json_encode(['status' => 'error', 'message' => 'Sorry, only JPG, JPEG, PNG, GIF, MP4, AVI & MOV files are allowed.']);
+if (!in_array($imageFileType, $allowed_types)) {
+    echo json_encode(['status' => 'error', 'message' => 'Only JPG, JPEG, PNG, GIF, MP4, AVI & MOV files are allowed']);
     $uploadOk = 0;
     exit();
 }
 
-// Check if $uploadOk is set to 0 by an error
+// If any validation has failed
 if ($uploadOk == 0) {
-    echo json_encode(['status' => 'error', 'message' => 'Sorry, your file was not uploaded.']);
-} else {
-    if (move_uploaded_file($_FILES["media"]["tmp_name"], $target_file)) {
-        $media_type = (strstr(mime_content_type($target_file), "video/")) ? 'video' : 'image';
+    echo json_encode(['status' => 'error', 'message' => 'File did not pass validation']);
+    exit();
+}
 
-        // Updated SQL to insert user location data (country, state, region)
-        $stmt = $conn->prepare("INSERT INTO user_media (user_id, file_path, media_type, user_country, user_state, user_region) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("isssss", $user_id, $target_file, $media_type, $user_country, $user_state, $user_region);
+// Attempt to move the uploaded file
+if (move_uploaded_file($_FILES["media"]["tmp_name"], $target_file)) {
+    $media_type = (strstr(mime_content_type($target_file), "video/")) ? 'video' : 'image';
 
-        if ($stmt->execute()) {
-            echo json_encode(['status' => 'success', 'message' => 'File uploaded successfully', 'file_path' => $target_file]);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Failed to save file in the database.']);
-        }
-        $stmt->close();
+    // Updated SQL to insert user location data (country, state, region)
+    $stmt = $conn->prepare("INSERT INTO user_media (user_id, file_path, media_type, user_country, user_state, user_region) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("isssss", $user_id, $target_file, $media_type, $user_country, $user_state, $user_region);
+
+    if ($stmt->execute()) {
+        echo json_encode(['status' => 'success', 'message' => 'File uploaded successfully', 'file_path' => $target_file]);
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Sorry, there was an error uploading your file.']);
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Failed to save file in the database',
+            'error' => $stmt->error
+        ]);
     }
+    $stmt->close();
+} else {
+    // Check why the file upload failed
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Failed to upload the file. Error moving the file.',
+        'tmp_name' => $_FILES['media']['tmp_name'],
+        'target_file' => $target_file,
+        'upload_error_code' => $_FILES['media']['error'], // File upload error code
+    ]);
 }
 
 $conn->close();
