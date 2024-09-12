@@ -10,7 +10,7 @@ if ($user_id == 0) {
 }
 
 $target_dir = "uploads/";
-$unique_name = uniqid() . "_" . basename($_FILES["media"]["name"]);
+$unique_name = uniqid('', true) . "_" . basename($_FILES["media"]["name"]);
 $target_file = $target_dir . $unique_name;
 $uploadOk = 1;
 $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));

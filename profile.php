@@ -1,82 +1,89 @@
 <?php
 header('Content-Type: application/json');
 
+// Initialize response
+$response = [];
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    error_log("POST data: " . print_r($_POST, true));
-    error_log("FILES data: " . print_r($_FILES, true));
+    include('db_config.php'); // Ensure DB connection
+    $user_id = $conn->real_escape_string($_POST['user_id'] ?? '');
 
-    // Ensure the user is logged in by checking user_id in POST data
-    if (isset($_POST['user_id'])) {
-        echo json_encode(["status" => "success", "message" => "user_id received", "user_id" => $_POST['user_id']]);
-    } else {
-        echo json_encode(["status" => "error", "message" => "Missing user_id"]);
-    }
-    include('db_config.php');
-    $user_id = $conn->real_escape_string($_POST['user_id']);
+    // Check if user_id is provided
+    if (!empty($user_id)) {
+        $response['status'] = "success";
+        $response['message'] = "user_id received";
+        $response['user_id'] = $user_id;
 
-    // Check if a profile picture is provided
-    if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['size'] > 0) {
-        $profile_picture = $_FILES['profile_picture'];
-        $imageFileType = strtolower(pathinfo($profile_picture['name'], PATHINFO_EXTENSION));
-        $target_dir = "uploads/";
-        $target_file = $target_dir . uniqid('', true) . '.' . $imageFileType;
+        // Profile picture upload handling
+        if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['size'] > 0) {
+            $profile_picture = $_FILES['profile_picture'];
+            $imageFileType = strtolower(pathinfo($profile_picture['name'], PATHINFO_EXTENSION));
+            $target_dir = "uploads/";
+            $target_file = $target_dir . uniqid('', true) . '.' . $imageFileType;
 
-        // Validate the file type and size
-        $check = getimagesize($profile_picture['tmp_name']);
-        if ($check === false) {
-            echo json_encode(["status" => "error", "message" => "File is not a valid image"]);
-            exit();
-        }
-
-        if ($profile_picture['size'] > 5000000) { // 5MB size limit
-            echo json_encode(["status" => "error", "message" => "File size exceeds 5MB limit"]);
-            exit();
-        }
-
-        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
-        if (!in_array($imageFileType, $allowed_types)) {
-            echo json_encode(["status" => "error", "message" => "Only JPG, JPEG, PNG & GIF formats are allowed"]);
-            exit();
-        }
-
-        // Upload the new profile picture
-        if (move_uploaded_file($profile_picture['tmp_name'], $target_file)) {
-            // Fetch the existing profile picture (if any)
-            $sql = "SELECT profile_picture FROM users WHERE id = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param('i', $user_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $user = $result->fetch_assoc();
-            $existing_profile_picture = $user['profile_picture'];
-            $stmt->close();
-
-            // Delete the old profile picture if it exists
-            if (!empty($existing_profile_picture) && file_exists($existing_profile_picture)) {
-                unlink($existing_profile_picture);
+            // Validate the file type and size
+            $check = getimagesize($profile_picture['tmp_name']);
+            if ($check === false) {
+                $response['status'] = "error";
+                $response['message'] = "File is not a valid image";
+                echo json_encode($response);
+                exit();
             }
 
-            // Update the database with the new profile picture path
-            $sql = "UPDATE users SET profile_picture = ? WHERE id = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param('si', $target_file, $user_id);
-            if ($stmt->execute()) {
-                echo json_encode([
-                    "status" => "success",
-                    "message" => "Profile picture updated successfully",
-                    "profile_picture_url" => $target_file
-                ]);
+            if ($profile_picture['size'] > 5000000) { // 5MB size limit
+                $response['status'] = "error";
+                $response['message'] = "File size exceeds 5MB limit";
+                echo json_encode($response);
+                exit();
+            }
+
+            $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
+            if (!in_array($imageFileType, $allowed_types)) {
+                $response['status'] = "error";
+                $response['message'] = "Only JPG, JPEG, PNG & GIF formats are allowed";
+                echo json_encode($response);
+                exit();
+            }
+
+            // Try to upload the profile picture
+            if (move_uploaded_file($profile_picture['tmp_name'], $target_file)) {
+                // Update user's profile picture in the database
+                $sql = "UPDATE users SET profile_picture = ? WHERE id = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param('si', $target_file, $user_id);
+                
+                if ($stmt->execute()) {
+                    $response['status'] = "success";
+                    $response['message'] = "Profile picture updated successfully";
+                    $response['profile_picture_url'] = $target_file;
+                } else {
+                    $response['status'] = "error";
+                    $response['message'] = "Failed to update profile picture in the database";
+                }
+                $stmt->close();
             } else {
-                echo json_encode(["status" => "error", "message" => "Failed to update profile picture"]);
+                // Check why the file upload failed
+                $response['status'] = "error";
+                $response['message'] = "Failed to upload the profile picture";
+                $response['error'] = "File could not be moved. Check server permissions or file path.";
+                
+                // Log file upload error details for debugging
+                $response['tmp_name'] = $profile_picture['tmp_name'];
+                $response['target_file'] = $target_file;
+                $response['upload_error'] = $_FILES['profile_picture']['error']; // Error code
             }
-            $stmt->close();
         } else {
-            echo json_encode(["status" => "error", "message" => "Failed to upload the profile picture"]);
+            $response['status'] = "error";
+            $response['message'] = "No profile picture uploaded";
         }
     } else {
-        echo json_encode(["status" => "error", "message" => "No profile picture uploaded"]);
+        $response['status'] = "error";
+        $response['message'] = "Missing user_id";
     }
-} elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    echo json_encode($response);
+}
+
+elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (!isset($_GET['user_id'])) {
         echo json_encode(["status" => "error", "message" => "Missing user_id"]);
         exit();
@@ -105,4 +112,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $conn->close();
-?>
