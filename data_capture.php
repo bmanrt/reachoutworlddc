@@ -24,10 +24,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $phone = $conn->real_escape_string($input['phone']);
         $country = $conn->real_escape_string($input['country']);
 
-        // Handle optional location fields: user_country, user_state, user_region
+        // Handle optional location fields: user_country, user_state, user_region, region, zone
         $user_country = isset($input['user_country']) ? $conn->real_escape_string($input['user_country']) : null;
         $user_state = isset($input['user_state']) ? $conn->real_escape_string($input['user_state']) : null;
         $user_region = isset($input['user_region']) ? $conn->real_escape_string($input['user_region']) : null;
+        $region = isset($input['region']) ? $conn->real_escape_string($input['region']) : null; // New region field
+        $zone = isset($input['zone']) ? $conn->real_escape_string($input['zone']) : null;       // New zone field
 
         // Check if the exact same entry already exists in the database
         $checkSql = "SELECT * FROM captured_data WHERE user_id = ? AND name = ? AND email = ? AND phone = ? AND country = ?";
@@ -44,12 +46,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo json_encode(["status" => "error", "message" => "Duplicate entry: This data has already been captured"]);
             } else {
                 // Insert the data into the captured_data table if no duplicate is found
-                $insertSql = "INSERT INTO captured_data (user_id, name, email, phone, country, user_country, user_state, user_region) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                $insertSql = "INSERT INTO captured_data (user_id, name, email, phone, country, user_country, user_state, user_region, region, zone) 
+                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 $insertStmt = $conn->prepare($insertSql);
 
                 if ($insertStmt) {
-                    // Bind parameters, using NULL for any missing location fields
-                    $insertStmt->bind_param("isssssss", $user_id, $name, $email, $phone, $country, $user_country, $user_state, $user_region);
+                    // Bind parameters, using NULL for any missing location or region/zone fields
+                    $insertStmt->bind_param("isssssssss", $user_id, $name, $email, $phone, $country, $user_country, $user_state, $user_region, $region, $zone);
 
                     if ($insertStmt->execute()) {
                         // Send success response
