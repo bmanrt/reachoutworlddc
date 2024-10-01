@@ -20,23 +20,23 @@ $uploadOk = 1;
 $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
 // Logging the paths and variables for debugging
-echo json_encode([
-    'status' => 'debug',
-    'message' => 'Starting upload process',
-    'target_file' => $target_file,
-    'temp_file' => $_FILES['media']['tmp_name']
-]);
+// echo json_encode([
+//     'status' => 'debug',
+//     'message' => 'Starting upload process',
+//     'target_file' => $target_file,
+//     'temp_file' => $_FILES['media']['tmp_name']
+// ]);
 
 // Check if the file is an image or video
 $check = getimagesize($_FILES["media"]["tmp_name"]);
 if ($check !== false) {
     $uploadOk = 1;
-    echo json_encode(['status' => 'debug', 'message' => 'File is a valid image']);
+    // echo json_encode(['status' => 'debug', 'message' => 'File is a valid image']);
 } else {
     $file_type = mime_content_type($_FILES["media"]["tmp_name"]);
     if (strstr($file_type, "video/")) {
         $uploadOk = 1;
-        echo json_encode(['status' => 'debug', 'message' => 'File is a valid video']);
+        // echo json_encode(['status' => 'debug', 'message' => 'File is a valid video']);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'File is not an image or video']);
         $uploadOk = 0;
