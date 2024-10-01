@@ -47,7 +47,7 @@ if ($result->num_rows > 0) {
 
     // Optionally, add the base URL for the profile picture
     if (!empty($user['profile_picture'])) {
-        $user['profile_picture'] = 'http://yourserver.com/' . $user['profile_picture']; // Adjust the base URL
+        $user['profile_picture'] = 'http://apps.qubators.biz/reachoutworlddc/' . $user['profile_picture']; // Adjust the base URL
     }
 
     echo json_encode($user); // Return user details as JSON
